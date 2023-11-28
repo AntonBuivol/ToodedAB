@@ -31,9 +31,13 @@ namespace ToodedAB
         private void InitializeComponent()
         {
             this.dgv = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Lisa = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.Kutsuta_Kategooria = new System.Windows.Forms.Button();
+            this.Toode = new System.Windows.Forms.ComboBox();
+            this.Kogus = new System.Windows.Forms.ComboBox();
+            this.Hind = new System.Windows.Forms.ComboBox();
+            this.Kat = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,15 +49,15 @@ namespace ToodedAB
             this.dgv.Size = new System.Drawing.Size(936, 223);
             this.dgv.TabIndex = 0;
             // 
-            // button1
+            // Lisa
             // 
-            this.button1.Location = new System.Drawing.Point(127, 243);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 26);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Lisa";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.Lisa.Location = new System.Drawing.Point(127, 243);
+            this.Lisa.Name = "Lisa";
+            this.Lisa.Size = new System.Drawing.Size(75, 26);
+            this.Lisa.TabIndex = 1;
+            this.Lisa.Text = "Lisa";
+            this.Lisa.UseVisualStyleBackColor = true;
+            this.Lisa.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -65,22 +69,64 @@ namespace ToodedAB
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
+            // Kutsuta_Kategooria
             // 
-            this.button3.Location = new System.Drawing.Point(289, 243);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 26);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.Kutsuta_Kategooria.Location = new System.Drawing.Point(289, 243);
+            this.Kutsuta_Kategooria.Name = "Kutsuta_Kategooria";
+            this.Kutsuta_Kategooria.Size = new System.Drawing.Size(75, 26);
+            this.Kutsuta_Kategooria.TabIndex = 3;
+            this.Kutsuta_Kategooria.Text = "Kutsuta";
+            this.Kutsuta_Kategooria.UseVisualStyleBackColor = true;
+            this.Kutsuta_Kategooria.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // Toode
+            // 
+            this.Toode.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.Toode.FormattingEnabled = true;
+            this.Toode.ItemHeight = 20;
+            this.Toode.Location = new System.Drawing.Point(171, 24);
+            this.Toode.Name = "Toode";
+            this.Toode.Size = new System.Drawing.Size(120, 28);
+            this.Toode.TabIndex = 4;
+            // 
+            // Kogus
+            // 
+            this.Kogus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.Kogus.FormattingEnabled = true;
+            this.Kogus.Location = new System.Drawing.Point(171, 82);
+            this.Kogus.Name = "Kogus";
+            this.Kogus.Size = new System.Drawing.Size(120, 28);
+            this.Kogus.TabIndex = 5;
+            this.Kogus.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
+            // Hind
+            // 
+            this.Hind.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.Hind.FormattingEnabled = true;
+            this.Hind.Location = new System.Drawing.Point(171, 140);
+            this.Hind.Name = "Hind";
+            this.Hind.Size = new System.Drawing.Size(120, 28);
+            this.Hind.TabIndex = 6;
+            // 
+            // Kat
+            // 
+            this.Kat.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
+            this.Kat.FormattingEnabled = true;
+            this.Kat.Location = new System.Drawing.Point(171, 198);
+            this.Kat.Name = "Kat";
+            this.Kat.Size = new System.Drawing.Size(120, 28);
+            this.Kat.TabIndex = 7;
             // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(960, 510);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.Kat);
+            this.Controls.Add(this.Hind);
+            this.Controls.Add(this.Kogus);
+            this.Controls.Add(this.Toode);
+            this.Controls.Add(this.Kutsuta_Kategooria);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Lisa);
             this.Controls.Add(this.dgv);
             this.Name = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
@@ -90,9 +136,13 @@ namespace ToodedAB
 
         #endregion
         private System.Windows.Forms.DataGridView dgv;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Lisa;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button Kutsuta_Kategooria;
+        private System.Windows.Forms.ComboBox Toode;
+        private System.Windows.Forms.ComboBox Kogus;
+        private System.Windows.Forms.ComboBox Hind;
+        private System.Windows.Forms.ComboBox Kat;
     }
 }
 
