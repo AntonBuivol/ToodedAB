@@ -38,7 +38,10 @@ namespace ToodedAB
             this.Kogus = new System.Windows.Forms.ComboBox();
             this.Hind = new System.Windows.Forms.ComboBox();
             this.Kat = new System.Windows.Forms.ComboBox();
+            this.Otsi_Pilt = new System.Windows.Forms.Button();
+            this.Toode_pb = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Toode_pb)).BeginInit();
             this.SuspendLayout();
             // 
             // dgv
@@ -48,6 +51,7 @@ namespace ToodedAB
             this.dgv.Name = "dgv";
             this.dgv.Size = new System.Drawing.Size(936, 223);
             this.dgv.TabIndex = 0;
+            this.dgv.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellContentClick);
             // 
             // Lisa
             // 
@@ -117,9 +121,29 @@ namespace ToodedAB
             this.Kat.Size = new System.Drawing.Size(120, 28);
             this.Kat.TabIndex = 7;
             // 
+            // Otsi_Pilt
+            // 
+            this.Otsi_Pilt.Location = new System.Drawing.Point(541, 212);
+            this.Otsi_Pilt.Name = "Otsi_Pilt";
+            this.Otsi_Pilt.Size = new System.Drawing.Size(75, 26);
+            this.Otsi_Pilt.TabIndex = 8;
+            this.Otsi_Pilt.Text = "Otsi Pilt";
+            this.Otsi_Pilt.UseVisualStyleBackColor = true;
+            this.Otsi_Pilt.Click += new System.EventHandler(this.Otsi_Pilt_Click);
+            // 
+            // Toode_pb
+            // 
+            this.Toode_pb.Location = new System.Drawing.Point(575, 24);
+            this.Toode_pb.Name = "Toode_pb";
+            this.Toode_pb.Size = new System.Drawing.Size(304, 182);
+            this.Toode_pb.TabIndex = 9;
+            this.Toode_pb.TabStop = false;
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(960, 510);
+            this.Controls.Add(this.Toode_pb);
+            this.Controls.Add(this.Otsi_Pilt);
             this.Controls.Add(this.Kat);
             this.Controls.Add(this.Hind);
             this.Controls.Add(this.Kogus);
@@ -130,6 +154,7 @@ namespace ToodedAB
             this.Controls.Add(this.dgv);
             this.Name = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Toode_pb)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -143,6 +168,8 @@ namespace ToodedAB
         private System.Windows.Forms.ComboBox Kogus;
         private System.Windows.Forms.ComboBox Hind;
         private System.Windows.Forms.ComboBox Kat;
+        private System.Windows.Forms.Button Otsi_Pilt;
+        private System.Windows.Forms.PictureBox Toode_pb;
     }
 }
 
