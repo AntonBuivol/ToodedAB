@@ -40,6 +40,8 @@ namespace ToodedAB
             this.Kat = new System.Windows.Forms.ComboBox();
             this.Otsi_Pilt = new System.Windows.Forms.Button();
             this.Toode_pb = new System.Windows.Forms.PictureBox();
+            this.Lisa_kategooria = new System.Windows.Forms.Button();
+            this.Kustuta = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Toode_pb)).BeginInit();
             this.SuspendLayout();
@@ -51,7 +53,7 @@ namespace ToodedAB
             this.dgv.Name = "dgv";
             this.dgv.Size = new System.Drawing.Size(936, 223);
             this.dgv.TabIndex = 0;
-            this.dgv.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_CellContentClick);
+            this.dgv.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_RowHeaderMouseClick);
             // 
             // Lisa
             // 
@@ -75,11 +77,11 @@ namespace ToodedAB
             // 
             // Kutsuta_Kategooria
             // 
-            this.Kutsuta_Kategooria.Location = new System.Drawing.Point(289, 243);
+            this.Kutsuta_Kategooria.Location = new System.Drawing.Point(306, 200);
             this.Kutsuta_Kategooria.Name = "Kutsuta_Kategooria";
-            this.Kutsuta_Kategooria.Size = new System.Drawing.Size(75, 26);
+            this.Kutsuta_Kategooria.Size = new System.Drawing.Size(115, 26);
             this.Kutsuta_Kategooria.TabIndex = 3;
-            this.Kutsuta_Kategooria.Text = "Kutsuta";
+            this.Kutsuta_Kategooria.Text = "Kutsuta kategooria";
             this.Kutsuta_Kategooria.UseVisualStyleBackColor = true;
             this.Kutsuta_Kategooria.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -101,7 +103,6 @@ namespace ToodedAB
             this.Kogus.Name = "Kogus";
             this.Kogus.Size = new System.Drawing.Size(120, 28);
             this.Kogus.TabIndex = 5;
-            this.Kogus.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // Hind
             // 
@@ -139,9 +140,31 @@ namespace ToodedAB
             this.Toode_pb.TabIndex = 9;
             this.Toode_pb.TabStop = false;
             // 
+            // Lisa_kategooria
+            // 
+            this.Lisa_kategooria.Location = new System.Drawing.Point(26, 243);
+            this.Lisa_kategooria.Name = "Lisa_kategooria";
+            this.Lisa_kategooria.Size = new System.Drawing.Size(95, 26);
+            this.Lisa_kategooria.TabIndex = 0;
+            this.Lisa_kategooria.Text = "Lisa kategooria";
+            this.Lisa_kategooria.UseVisualStyleBackColor = true;
+            this.Lisa_kategooria.Click += new System.EventHandler(this.Lisa_kategooria_Click);
+            // 
+            // Kustuta
+            // 
+            this.Kustuta.Location = new System.Drawing.Point(289, 243);
+            this.Kustuta.Name = "Kustuta";
+            this.Kustuta.Size = new System.Drawing.Size(82, 26);
+            this.Kustuta.TabIndex = 10;
+            this.Kustuta.Text = "Kustuta";
+            this.Kustuta.UseVisualStyleBackColor = true;
+            this.Kustuta.Click += new System.EventHandler(this.Kustuta_Click);
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(960, 510);
+            this.Controls.Add(this.Kustuta);
+            this.Controls.Add(this.Lisa_kategooria);
             this.Controls.Add(this.Toode_pb);
             this.Controls.Add(this.Otsi_Pilt);
             this.Controls.Add(this.Kat);
@@ -170,6 +193,8 @@ namespace ToodedAB
         private System.Windows.Forms.ComboBox Kat;
         private System.Windows.Forms.Button Otsi_Pilt;
         private System.Windows.Forms.PictureBox Toode_pb;
+        private System.Windows.Forms.Button Lisa_kategooria;
+        private System.Windows.Forms.Button Kustuta;
     }
 }
 

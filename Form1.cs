@@ -22,7 +22,6 @@ namespace ToodedAB
         SqlDataAdapter adapter_toode, adapter_kategooria;
         SqlCommand command;
         Label lb1, lb2, lb3, lb4;
-        Button btn1, btn2, btn3, btn4, btn5, btn6;
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -40,9 +39,31 @@ namespace ToodedAB
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+        private void Lisa_kategooria_Click(object sender, EventArgs e)
+        {
+            bool on = false;
+            foreach (var item in Kat.Items)
+            {
+                if (item.ToString() == Kat.Text)
+                {
+                    on = true;
+                }
+            }
+            if (on == false)
+            {
+                command = new SqlCommand("INSERT INTO Kategooria (Kategooria_nimetus) VALUES (@kat)", connect);
+                connect.Open();
+                command.Parameters.AddWithValue("@kat", Kat.Text);
+                command.ExecuteNonQuery();
+                connect.Close();
+                Kat.Items.Clear();
+                NaitaKategooriad();
+            }
+            else
+            {
+                MessageBox.Show("Andmebaasiga viga!");
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -51,32 +72,24 @@ namespace ToodedAB
             {
                 try
                 {
+
+                    command = new SqlCommand("UPDATE Toodetable SET Toodenimetus=@toode, Kogus=@kogus, Hind=@hind,Pilt=@pilt,Kategooriad=@kat WHERE Id=@id", connect);
                     connect.Open();
-
-                    command = new SqlCommand("SELECT Id FROM Kategooriatabel WHERE Kategooria_nimetus = @kat", connect);
-                    command.Parameters.AddWithValue("@kat", Kat.Text);
                     int Id = Convert.ToInt32(command.ExecuteScalar());
-
-                    command = new SqlCommand("INSERT INTO Toodetabel (Toodenimetus, Kogus, Hind, Pilte, Kategooriat) VALUES (@toode, @kogus, @hind, @pilt, @kat)", connect);
+                    command.Parameters.AddWithValue("@id", Id);
                     command.Parameters.AddWithValue("@toode", Toode.Text);
                     command.Parameters.AddWithValue("@kogus", Convert.ToInt32(Kogus.Text));
                     command.Parameters.AddWithValue("@hind", Convert.ToDouble(Hind.Text));
                     command.Parameters.AddWithValue("@pilt", Toode.Text + ".jpg");
-                    command.Parameters.AddWithValue("@kat", Id);
+                    command.Parameters.AddWithValue("@kat", Kat.Text);
 
                     command.ExecuteNonQuery();
+                    connect.Close();
+                    NaitaAndmed();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Andmebaasid viga: " + ex.Message);
-                }
-                finally
-                {
-                    if (connect.State == ConnectionState.Open)
-                    {
-                        connect.Close();
-                        NaitaAndmed();
-                    }
                 }
             }
             else
@@ -99,7 +112,7 @@ namespace ToodedAB
                 save.InitialDirectory = Path.GetFullPath(@"..\..\..\Images");
                 save.FileName = Toode.Text+Path.GetExtension(open.FileName);
                 save.Filter = "Images" + Path.GetExtension(open.FileName)+"|"+Path.GetExtension(open.FileName);
-                if (save.ShowDialog()==DialogResult.OK)
+                if (save.ShowDialog()==DialogResult.OK && Toode.Text!=null)
                 {
                     File.Copy(open.FileName, save.FileName);
                     Toode_pb.Image=Image.FromFile(save.FileName);
@@ -111,25 +124,25 @@ namespace ToodedAB
             }
         }
 
-        
+        int Id = 0;
         private void button1_Click(object sender, EventArgs e)
         {
-            if(Toode.Text.Trim()!=string.Empty && Kogus.Text.Trim()!=string.Empty && Hind.Text.Trim()!=string.Empty && Kat.SelectedItem!=null)
+            if (Toode.Text.Trim() != string.Empty && Kogus.Text.Trim() != string.Empty && Hind.Text.Trim() != string.Empty && Kat.SelectedItem != null)
             {
                 try
                 {
                     connect.Open();
-
-                    command = new SqlCommand("SELECT Id FROM Kategooria WHERE Katergooria_nimetus = @kat", connect);
+                    command = new SqlCommand("SELECT Id FROM Kategooria WHERE Kategooria_nimetus = @kat", connect);
                     command.Parameters.AddWithValue("@kat", Kat.Text);
                     command.ExecuteNonQuery();
+                    Id = Convert.ToInt32(command.ExecuteScalar());
 
                     command = new SqlCommand("INSERT INTO Toodetable (Toodenimetus,Kogus,Hind,Pilt,Kategooriad) VALUES (@toode,@kogus,@hind,@pilt,@kat)", connect);
                     command.Parameters.AddWithValue("@toode", Toode.Text);
-                    command.Parameters.AddWithValue("@kogus", Kogus.Text);
-                    command.Parameters.AddWithValue("@hind", Hind.Text);
+                    command.Parameters.AddWithValue("@kogus", Convert.ToInt32(Kogus.Text));
+                    command.Parameters.AddWithValue("@hind", Convert.ToDouble(Hind.Text));
                     command.Parameters.AddWithValue("@pilt", Toode.Text+".jpg");
-                    command.Parameters.AddWithValue("@kat", Toode.Text);
+                    command.Parameters.AddWithValue("@kat", Id);
 
                     command.ExecuteNonQuery();
                     connect.Close();
@@ -140,31 +153,67 @@ namespace ToodedAB
                     MessageBox.Show("Andmebaasiga viga!");
                 }
             }
+            else
+            {
+                MessageBox.Show("Sisesta andmeid!");
+            }
         }
+
 
         
 
-        private void dgv_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void Kustuta_Click(object sender, EventArgs e)
+        {
+            if(dgv.SelectedRows.Count>0)
+            {
+                DataGridViewRow selectedRow = dgv.SelectedRows[0];
+                int selectedRowID = Convert.ToInt32(selectedRow.Cells["id"].Value);
+
+                try
+                {
+                    if (connect.State==ConnectionState.Closed)
+                    {
+                        connect.Open();
+                    }
+                    string deleteQuery = "DELETE FROM Toodetable WHERE Id=@id";
+                    command = new SqlCommand(deleteQuery,connect);
+                    command.Parameters.AddWithValue("@id", selectedRowID);
+                    command.ExecuteNonQuery();
+                    connect.Close();
+
+                    dgv.Rows.Remove(selectedRow);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("Probleem tekkis kustutamisel: " + ex.Message);
+                }
+                finally
+                {
+                    if(connect.State==ConnectionState.Open)
+                    {
+                        connect.Close();
+                    }
+                }
+            }
+        }
+
+        private void dgv_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             Id = (int)dgv.Rows[e.RowIndex].Cells["id"].Value;
-            Toode.Text = dgv.Rows[e.RowIndex].Cells[1].Value.ToString();
-            Kogus.Text = dgv.Rows[e.RowIndex].Cells[2].Value.ToString();
-            Hind.Text = dgv.Rows[e.RowIndex].Cells[3].Value.ToString();
+            Toode.Text = dgv.Rows[e.RowIndex].Cells["Toodenimetus"].Value.ToString();
+            Kogus.Text = dgv.Rows[e.RowIndex].Cells["Kogus"].Value.ToString();
+            Hind.Text = dgv.Rows[e.RowIndex].Cells["Hind"].Value.ToString();
             try
             {
-                Toode_pb.Image = Image.FromFile(@"..\..\..\Images" + dgv.Rows[e.RowIndex].Cells[4].Value.ToString());
+                Toode_pb.Image = Image.FromFile(Path.Combine(Path.GetFullPath(@"..\..\..\..\..\..\Pictures"), dgv.Rows[e.RowIndex].Cells["Pilt"].Value.ToString()));
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("Pilt puudub");
+                MessageBox.Show("Pilt puudub"+ex.Message);
             }
             Kat.SelectedItem = dgv.Rows[e.RowIndex].Cells[5].Value;
         }
 
-        //private void Lisa_Kategooriad(object sender, EventArgs e)
-        //{
-        //    command = new SqlCommand("INSERT INTO kategooriatabel (Kategooria_nimetus) VALUES ()");
-        //}
         public Form1()
         {
             InitializeComponent();
@@ -172,39 +221,10 @@ namespace ToodedAB
             lb2 = new Label() { Text = "Kogus", Location = new Point(20, lb1.Location.Y+60), Font = new Font("Arial", 16), ForeColor = Color.Black, Size=new Size(150, 30) };
             lb3 = new Label() { Text = "Hind", Location = new Point(20, lb2.Location.Y+60), Font = new Font("Arial", 16), ForeColor = Color.Black, Size=new Size(150, 30) };
             lb4 = new Label() { Text = "Kategooria", Location = new Point(20,lb3.Location.Y+60), Font = new Font("Arial", 16), ForeColor = Color.Black, Size=new Size(150,30)};
-            btn1 = new Button() { Text = "Lisa kategooria", Location = new Point(lb4.Left, lb4.Bottom+15), Size = new Size(100,20), FlatStyle = FlatStyle.Popup };
-            btn1.Click +=Btn1_Click;
-            this.Controls.AddRange(new Control[] {lb1,lb2,lb3,lb4,btn1});
+            this.Controls.AddRange(new Control[] {lb1,lb2,lb3,lb4});
             NaitaAndmed();
             NaitaKategooriad();
 
-        }
-
-        private void Btn1_Click(object sender, EventArgs e)
-        {
-            bool on = false;
-            foreach(var item in Kat.Items)
-            {
-                if(item.ToString()== Kat.Text)
-                {
-                    on = true;
-                }
-            }
-            if(on==false)
-            {
-                command = new SqlCommand("INSERT INTO Kategooria (Kategooria_nimetus) VALUES (@kat)", connect);
-                connect.Open();
-                command.Parameters.AddWithValue("@kat", Kat.Text);
-                command.ExecuteNonQuery();
-                connect.Close();
-                Kat.Items.Clear();
-                NaitaKategooriad();
-            }
-            else
-            {
-                MessageBox.Show("Andmebaasiga viga!");
-            }
-            
         }
 
         private void NaitaKategooriad()
@@ -224,7 +244,7 @@ namespace ToodedAB
                 else
                 {
                     command = new SqlCommand("DELETE FROM Kategooria WHERE Id=@Id", connect);
-                    command.Parameters.AddWithValue("@Id", item["Id"]);
+                    command.Parameters.AddWithValue("@Id", item["id"]);
                     command.ExecuteNonQuery();
                 }
             }
@@ -237,16 +257,24 @@ namespace ToodedAB
             DataTable dt_toode = new DataTable();
             adapter_toode = new SqlDataAdapter("SELECT Toodetable.Id, Toodetable.Toodenimetus, Toodetable.Kogus, Toodetable.Hind, Toodetable.Pilt, Kategooria.Kategooria_nimetus FROM Toodetable INNER JOIN Kategooria on Toodetable.Kategooriad=Kategooria.Id", connect);
             adapter_toode.Fill(dt_toode);
+            dgv.Columns.Clear();
             dgv.DataSource = dt_toode;
             DataGridViewComboBoxColumn combo_kat = new DataGridViewComboBoxColumn();
+            combo_kat.HeaderText = "Kategooria";
+            combo_kat.Name = "KategooriaColumn";
+            combo_kat.DataPropertyName = "Kategooria";
+            HashSet<string> uniqueCategories = new HashSet<string>();
             foreach(DataRow item in dt_toode.Rows)
             {
-                if (!combo_kat.Items.Contains(item["Kategooria_nimetus"]))
+                string category = item["Kategooria_nimetus"].ToString();
+                if (!uniqueCategories.Contains(category))
                 {
-                    combo_kat.Items.Add(item["Kategooria_nimetus"]);
+                    uniqueCategories.Add(category);
+                    combo_kat.Items.Add(category);
                 }
             }
             dgv.Columns.Add(combo_kat);
+            dgv.Columns["Kategooria_nimetus"].Visible = false;
             connect.Close();
         }
     }
