@@ -21,7 +21,6 @@ namespace ToodedAB
         SqlConnection connect = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ToodeDB;Integrated Security=True");
         SqlDataAdapter adapter_toode, adapter_kategooria;
         SqlCommand command;
-        Label lb1, lb2, lb3, lb4;
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -109,12 +108,13 @@ namespace ToodedAB
             if(open.ShowDialog()==DialogResult.OK && Toode.Text!=null)
             {
                 SaveFileDialog save = new SaveFileDialog();
-                save.InitialDirectory = Path.GetFullPath(@"..\..\..\Images");
+                save.InitialDirectory = Path.GetFullPath(@"..\..\Images");
                 save.FileName = Toode.Text+Path.GetExtension(open.FileName);
                 save.Filter = "Images" + Path.GetExtension(open.FileName)+"|"+Path.GetExtension(open.FileName);
                 if (save.ShowDialog()==DialogResult.OK && Toode.Text!=null)
                 {
                     File.Copy(open.FileName, save.FileName);
+                    Toode_pb.SizeMode = PictureBoxSizeMode.StretchImage;
                     Toode_pb.Image=Image.FromFile(save.FileName);
                 }
             }
@@ -205,7 +205,8 @@ namespace ToodedAB
             Hind.Text = dgv.Rows[e.RowIndex].Cells["Hind"].Value.ToString();
             try
             {
-                Toode_pb.Image = Image.FromFile(Path.Combine(Path.GetFullPath(@"..\..\..\..\..\..\Pictures"), dgv.Rows[e.RowIndex].Cells["Pilt"].Value.ToString()));
+                Toode_pb.SizeMode = PictureBoxSizeMode.StretchImage;
+                Toode_pb.Image = Image.FromFile(Path.Combine(Path.GetFullPath(@"..\..\Images"), dgv.Rows[e.RowIndex].Cells["Pilt"].Value.ToString()));
             }
             catch(Exception ex)
             {
@@ -217,11 +218,6 @@ namespace ToodedAB
         public Form1()
         {
             InitializeComponent();
-            lb1 = new Label() { Text = "Toode nimetus", Location = new Point(20, 20), Font = new Font("Arial", 16), ForeColor = Color.Black, Size=new Size(150, 30) };
-            lb2 = new Label() { Text = "Kogus", Location = new Point(20, lb1.Location.Y+60), Font = new Font("Arial", 16), ForeColor = Color.Black, Size=new Size(150, 30) };
-            lb3 = new Label() { Text = "Hind", Location = new Point(20, lb2.Location.Y+60), Font = new Font("Arial", 16), ForeColor = Color.Black, Size=new Size(150, 30) };
-            lb4 = new Label() { Text = "Kategooria", Location = new Point(20,lb3.Location.Y+60), Font = new Font("Arial", 16), ForeColor = Color.Black, Size=new Size(150,30)};
-            this.Controls.AddRange(new Control[] {lb1,lb2,lb3,lb4});
             NaitaAndmed();
             NaitaKategooriad();
 
