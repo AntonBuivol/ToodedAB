@@ -67,34 +67,18 @@ namespace ToodedAB
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Toode.Text.Trim() != string.Empty && Kogus.Text.Trim() != string.Empty && Hind.Text.Trim() != string.Empty && Kat.SelectedItem != null)
-            {
-                try
-                {
+            command = new SqlCommand("UPDATE Toodetable SET Toodenimetus=@toode, Kogus=@kogus, Hind=@hind,Pilt=@pilt,Kategooriad=@kat WHERE Id=@id", connect);
+            connect.Open();
+            command.Parameters.AddWithValue("@id", Id);
+            command.Parameters.AddWithValue("@toode", Toode.Text);
+            command.Parameters.AddWithValue("@kogus", Convert.ToInt32(Kogus.Text));
+            command.Parameters.AddWithValue("@hind", Convert.ToDouble(Hind.Text));
+            command.Parameters.AddWithValue("@pilt", Toode.Text + ".jpg");
+            command.Parameters.AddWithValue("@kat", Kat.Text);
 
-                    command = new SqlCommand("UPDATE Toodetable SET Toodenimetus=@toode, Kogus=@kogus, Hind=@hind,Pilt=@pilt,Kategooriad=@kat WHERE Id=@id", connect);
-                    connect.Open();
-                    int Id = Convert.ToInt32(command.ExecuteScalar());
-                    command.Parameters.AddWithValue("@id", Id);
-                    command.Parameters.AddWithValue("@toode", Toode.Text);
-                    command.Parameters.AddWithValue("@kogus", Convert.ToInt32(Kogus.Text));
-                    command.Parameters.AddWithValue("@hind", Convert.ToDouble(Hind.Text));
-                    command.Parameters.AddWithValue("@pilt", Toode.Text + ".jpg");
-                    command.Parameters.AddWithValue("@kat", Kat.Text);
-
-                    command.ExecuteNonQuery();
-                    connect.Close();
-                    NaitaAndmed();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Andmebaasid viga: " + ex.Message);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Sisestage andmeid!");
-            }
+            command.ExecuteNonQuery();
+            connect.Close();
+            NaitaAndmed();
         }
 
         private void Otsi_Pilt_Click(object sender, EventArgs e)
@@ -275,3 +259,24 @@ namespace ToodedAB
         }
     }
 }
+
+
+//create table Kategooria(
+//Id int primary key identity(1,1),
+//Kategooria_nimetus varchar(100),
+//Kirjeldus text);
+
+//create table Toodetable(
+//Id int primary key identity(1,1),
+//Toodenimetus varchar(100),
+//Kogus int,
+//Hind int,
+//Pilt text,
+//Kategooriad int,
+//FOREIGN KEY (Kategooriad) REFERENCES Kategooria(Id)
+//);
+
+//create table Account(
+//Id int primary key identity(1,1),
+//Nimi varchar(100),
+//Roll varchar(50));
