@@ -20,64 +20,25 @@ namespace ToodedAB
         public Registration()
         {
             InitializeComponent();
+            NaitaRoll();
         }
 
-        private void regitration_linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            label2.Visible = true;
-            login_linkLabel.Visible = true;
-            registration_button.Visible = true;
-            label3.Visible = true;
-            rollbox.Visible = true;
-
-            label4.Visible = false;
-            login_button.Visible = false;
-            regitration_linkLabel.Visible = false;
-            Text = "Registration";
-        }
-
-        private void login_linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            label4.Visible = true;
-            login_button.Visible = true;
-            regitration_linkLabel.Visible = true;
-
-            label3.Visible = false;
-            rollbox.Visible = false;
-            label2.Visible = false;
-            login_linkLabel.Visible = false;
-            registration_button.Visible = false;
-            Text = "Logi sisse";
-        }
-
-        private void Registration_Load(object sender, EventArgs e)
-        {
-            label2.Visible = true;
-            login_linkLabel.Visible = true;
-            registration_button.Visible = true;
-            label3.Visible = true;
-            rollbox.Visible = true;
-
-            label4.Visible = false;
-            login_button.Visible = false;
-            regitration_linkLabel.Visible = false;
-        }
-
-        private void login_button_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        int Id = 0;
         private void registration_button_Click(object sender, EventArgs e)
         {
-            if (namebox.Text.Trim() != string.Empty && rollbox.Text.Trim() != string.Empty)
+            if (namebox.Text.Trim() != string.Empty && rollbox.SelectedItem != null)
             {
                 try
                 {
                     connect.Open();
+                    command = new SqlCommand("SELECT Id FROM Account WHERE Roll = @roll", connect);
+                    command.Parameters.AddWithValue("@roll", rollbox.Text);
+                    command.ExecuteNonQuery();
+                    Id = Convert.ToInt32(command.ExecuteScalar());
+
                     command = new SqlCommand("INSERT INTO Account (Nimi,Roll) VALUES (@nimi,@roll)", connect);
                     command.Parameters.AddWithValue("@nimi", namebox.Text);
-                    command.Parameters.AddWithValue("@roll", rollbox.Text);
+                    command.Parameters.AddWithValue("@roll", Id);
 
                     command.ExecuteNonQuery();
                     connect.Close();
@@ -97,6 +58,35 @@ namespace ToodedAB
                     kassa.ShowDialog();
                 }
             }
+        }
+
+        private void login_button_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NaitaRoll()
+        {
+            rollbox.Items.Clear();
+            rollbox.Text = "";
+            connect.Open();
+            adapter_kategooria = new SqlDataAdapter("SELECT Id, Roll FROM Account", connect);
+            DataTable dt_kat = new DataTable();
+            adapter_kategooria.Fill(dt_kat);
+            foreach (DataRow item in dt_kat.Rows)
+            {
+                if (!rollbox.Items.Contains(item["Roll"]))
+                {
+                    rollbox.Items.Add(item["Roll"]);
+                }
+                else
+                {
+                    command = new SqlCommand("DELETE FROM Account WHERE Id=@Id", connect);
+                    command.Parameters.AddWithValue("@Id", item["id"]);
+                    command.ExecuteNonQuery();
+                }
+            }
+            connect.Close();
         }
     }
 }
